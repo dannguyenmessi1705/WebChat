@@ -1,0 +1,14 @@
+services:
+  webchat_user:
+    container_name: webchat_user
+    image: postgres:13
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: didannguyen
+      POSTGRES_PASSWORD: 17052002
+      POSTGRES_DB: webchat_user
+    restart: unless-stopped
+    volumes:
+      - ./webchat_user_db:/var/lib/postgresql
+      - ./webchat_user_db_data:/var/lib/postgresql/data
