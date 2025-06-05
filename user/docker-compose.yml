@@ -12,3 +12,34 @@ services:
     volumes:
       - ./webchat_user_db:/var/lib/postgresql
       - ./webchat_user_db_data:/var/lib/postgresql/data
+    networks:
+      - zd-chat
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -k -f http://127.0.0.1:9001/minio/health/live || exit 1" ]
+    volumes:
+      - ./minio-data:/data
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+      LANG: en_US.UTF-8
+      MINIO_PROMETHEUS_AUTH_TYPE: "public"
+      MINIO_ROOT_USER: "didannguyen"
+      MINIO_ROOT_PASSWORD: "17052002"
+    command: server /data --console-address ':9001'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+    ports:
+      - "10000:9000" # API
+      - "10001:9001" # UI
+    networks:
+      - zd-chat
+
+networks:
+  zd-chat:
+    driver: bridge

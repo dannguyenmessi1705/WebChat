@@ -5,6 +5,7 @@ import com.didan.archetype.factory.response.GeneralResponse;
 import com.didan.archetype.factory.response.ResponseStatus;
 import com.didan.webchat.user.constant.ResponseStatusCodeEnumV2;
 import java.util.Date;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +16,24 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 public class CustomException {
 
+  @org.springframework.web.bind.annotation.ResponseStatus(HttpStatus.OK)
   @ExceptionHandler({ResourceAlreadyExistException.class})
-  public ResponseEntity<Object> handleResourceAlreadyExistException(ResourceAlreadyExistException ex) {
+  public ResponseEntity<GeneralResponse<Object>> handleResourceAlreadyExistException(ResourceAlreadyExistException ex) {
     log.error("Resource already exists: {}", ex.getMessage());
-    return createResponse(ResponseStatusCodeEnumV2.ALREADY_EXIST);
+    return returnFailData(new GeneralResponse<>(),
+                          ResponseStatusCodeEnumV2.ALREADY_EXIST.getCode(),
+                          ex.getMessage(),
+                          ex.getMessage());
   }
 
-  private ResponseEntity<Object> createResponse(ResponseStatusCode response) {
+  @org.springframework.web.bind.annotation.ResponseStatus(HttpStatus.OK)
+  @ExceptionHandler({ResourceNotFoundException.class})
+  public ResponseEntity<GeneralResponse<Object>> handleResourceNotFoundException(ResourceNotFoundException ex) {
+    log.error("Resource not found: {}", ex.getMessage());
+    return createResponse(ResponseStatusCodeEnumV2.NOT_FOUND);
+  }
+
+  private ResponseEntity<GeneralResponse<Object>> createResponse(ResponseStatusCode response) {
     ResponseStatus responseStatus = new ResponseStatus(response.getCode(), true);
     responseStatus.setResponseTime(new Date());
     GeneralResponse<Object> responseObject = new GeneralResponse<>();
