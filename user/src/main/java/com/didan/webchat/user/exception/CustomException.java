@@ -5,12 +5,9 @@ import com.didan.archetype.factory.response.GeneralResponse;
 import com.didan.archetype.factory.response.ResponseStatus;
 import com.didan.webchat.user.constant.ResponseStatusCodeEnumV2;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
