@@ -1,16 +1,12 @@
 package com.didan.webchat.user.controller;
 
-import com.didan.archetype.constant.ResponseStatusCode;
 import com.didan.archetype.constant.ResponseStatusCodeEnum;
 import com.didan.archetype.controller.restful.BaseController;
 import com.didan.archetype.factory.response.GeneralResponse;
 import com.didan.archetype.factory.response.ResponseFactory;
-import com.didan.webchat.user.dto.mapping.UserDTO;
 import com.didan.webchat.user.dto.request.RegisterRequestDTO;
-import com.didan.webchat.user.service.AuthService;
-import io.swagger.v3.oas.annotations.Operation;
+import com.didan.webchat.user.service.AuthUserService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -19,9 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author dannd1
@@ -35,18 +29,14 @@ import org.springframework.web.multipart.MultipartFile;
 public class AuthController extends BaseController {
 
   private final ResponseFactory responseFactory;
-  private final AuthService authService;
+  private final AuthUserService authUserService;
 
   @PostMapping(value = "register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<GeneralResponse<Object>> register(
       @Valid @ModelAttribute RegisterRequestDTO requestDTO
   ) {
     log.info("==> Start controller register");
-    try {
-      return responseFactory.success(authService.register(requestDTO));
-    } catch (Exception ex) {
-      return responseFactory.fail(ResponseStatusCodeEnum.INTERNAL_GENERAL_SERVER_ERROR);
-    }
+    return responseFactory.success(authUserService.register(requestDTO));
   }
 
   @PostMapping("login")

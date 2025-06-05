@@ -17,16 +17,16 @@ import org.springframework.web.multipart.MultipartFile;
 public class RegisterRequestDTO {
 
   @NotNull(message = "msg.fullname.required")
-  @Size(min = 3, max = 100, message = "msg.fullname.size")
+  @Size(min = 3, max = 100, message = "{msg.fullname.size}")
   String fullName;
-  @Size(min = 3, max = 50, message = "msg.username.size")
+  @Size(min = 3, max = 50, message = "{msg.username.size}")
   @NotNull(message = "msg.username.required")
   String username;
-  @NotNull(message = "msg.email.required")
-  @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z]{2,}$", message = "msg.email.invalid")
+  @NotNull(message = "{msg.email.required}")
+  @Pattern(regexp = "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$", message = "{msg.email.invalid}")
   String email;
-  @NotNull(message = "msg.password.required")
-  @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message = "msg.password.invalid")
+  @NotNull(message = "{msg.password.required}")
+  @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message = "{msg.password.invalid}")
   String password;
   MultipartFile file;
 }
