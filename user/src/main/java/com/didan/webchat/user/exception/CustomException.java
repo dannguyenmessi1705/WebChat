@@ -1,8 +1,10 @@
 package com.didan.webchat.user.exception;
 
 import com.didan.archetype.constant.ResponseStatusCode;
+import com.didan.archetype.constant.ResponseStatusCodeEnum;
 import com.didan.archetype.factory.response.GeneralResponse;
 import com.didan.archetype.factory.response.ResponseStatus;
+import com.didan.archetype.locale.Translator;
 import com.didan.webchat.user.constant.ResponseStatusCodeEnumV2;
 import java.util.Date;
 import java.util.List;
@@ -21,16 +23,29 @@ public class CustomException {
   public ResponseEntity<GeneralResponse<Object>> handleResourceAlreadyExistException(ResourceAlreadyExistException ex) {
     log.error("Resource already exists: {}", ex.getMessage());
     return returnFailData(new GeneralResponse<>(),
-                          ResponseStatusCodeEnumV2.ALREADY_EXIST.getCode(),
-                          ex.getMessage(),
-                          ex.getMessage());
+        ResponseStatusCodeEnumV2.ALREADY_EXIST.getCode(),
+        ex.getMessage(),
+        Translator.toLocale(ResponseStatusCodeEnumV2.ALREADY_EXIST.getCode()));
   }
 
   @org.springframework.web.bind.annotation.ResponseStatus(HttpStatus.OK)
   @ExceptionHandler({ResourceNotFoundException.class})
   public ResponseEntity<GeneralResponse<Object>> handleResourceNotFoundException(ResourceNotFoundException ex) {
     log.error("Resource not found: {}", ex.getMessage());
-    return createResponse(ResponseStatusCodeEnumV2.NOT_FOUND);
+    return returnFailData(new GeneralResponse<>(),
+        ResponseStatusCodeEnumV2.NOT_FOUND.getCode(),
+        ex.getMessage(),
+        Translator.toLocale(ResponseStatusCodeEnumV2.NOT_FOUND.getCode()));
+  }
+
+  @org.springframework.web.bind.annotation.ResponseStatus(HttpStatus.OK)
+  @ExceptionHandler({BadRequestException.class})
+  public ResponseEntity<GeneralResponse<Object>> handleBadRequestException(BadRequestException ex) {
+    log.error("Bad request: {}", ex.getMessage());
+    return returnFailData(new GeneralResponse<>(),
+        ResponseStatusCodeEnum.VALIDATION_ERROR.getCode(),
+        ex.getMessage(),
+        Translator.toLocale(ResponseStatusCodeEnum.VALIDATION_ERROR.getCode()));
   }
 
   private ResponseEntity<GeneralResponse<Object>> createResponse(ResponseStatusCode response) {

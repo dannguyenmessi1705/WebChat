@@ -1,5 +1,6 @@
 package com.didan.webchat.user.entity;
 
+import com.didan.webchat.user.constant.ThemeMode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,8 +48,4 @@ public class UserPreference {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    public enum ThemeMode {
-        LIGHT, DARK, SYSTEM
-    }
 }

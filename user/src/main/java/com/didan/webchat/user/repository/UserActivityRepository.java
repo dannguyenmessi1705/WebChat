@@ -1,8 +1,8 @@
 package com.didan.webchat.user.repository;
 
+import com.didan.webchat.user.constant.ActivityType;
 import com.didan.webchat.user.entity.User;
 import com.didan.webchat.user.entity.UserActivity;
-import com.didan.webchat.user.entity.UserActivity.ActivityType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

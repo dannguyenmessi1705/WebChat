@@ -4,7 +4,9 @@ import com.didan.archetype.constant.ResponseStatusCodeEnum;
 import com.didan.archetype.controller.restful.BaseController;
 import com.didan.archetype.factory.response.GeneralResponse;
 import com.didan.archetype.factory.response.ResponseFactory;
+import com.didan.webchat.user.dto.request.LoginRequestDTO;
 import com.didan.webchat.user.dto.request.RegisterRequestDTO;
+import com.didan.webchat.user.dto.response.LoginResponseDTO;
 import com.didan.webchat.user.service.AuthUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,12 +42,8 @@ public class AuthController extends BaseController {
   }
 
   @PostMapping("login")
-  public ResponseEntity<GeneralResponse<Object>> login() {
+  public ResponseEntity<GeneralResponse<LoginResponseDTO>> login(@Valid LoginRequestDTO loginRequestDTO) {
     log.info("==> Start controller login");
-    try {
-      return responseFactory.success("");
-    } catch (Exception ex) {
-      return responseFactory.fail(ResponseStatusCodeEnum.INTERNAL_GENERAL_SERVER_ERROR);
-    }
+    return responseFactory.success(authUserService.login(loginRequestDTO));
   }
 }

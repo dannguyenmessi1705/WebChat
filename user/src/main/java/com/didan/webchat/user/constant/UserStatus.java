@@ -1,4 +1,4 @@
-package com.didan.webchat.user.entity;
+package com.didan.webchat.user.constant;
 
 /**
  * Enum representing the status of a user account

@@ -1,6 +1,6 @@
 package com.didan.webchat.user.repository;
 
-import com.didan.webchat.user.entity.TokenType;
+import com.didan.webchat.user.constant.TokenType;
 import com.didan.webchat.user.entity.User;
 import com.didan.webchat.user.entity.UserToken;
 import org.springframework.data.jpa.repository.JpaRepository;

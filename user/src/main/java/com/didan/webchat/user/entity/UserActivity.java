@@ -1,5 +1,6 @@
 package com.didan.webchat.user.entity;
 
+import com.didan.webchat.user.constant.ActivityType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,14 +44,4 @@ public class UserActivity {
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp = LocalDateTime.now();
 
-    public enum ActivityType {
-        LOGIN,
-        LOGOUT,
-        PASSWORD_CHANGE,
-        PROFILE_UPDATE,
-        ACCOUNT_CREATION,
-        FAILED_LOGIN_ATTEMPT,
-        PASSWORD_RESET_REQUEST,
-        TOKEN_REFRESH
-    }
 }

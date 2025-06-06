@@ -1,5 +1,6 @@
 package com.didan.webchat.user.entity;
 
+import com.didan.webchat.user.constant.TokenType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
