@@ -153,10 +153,7 @@ public class AuthUserServiceImpl implements AuthUserService {
           });
     } else {
       user = userRepository.findByUsername(loginRequestDTO.getUsername())
-          .orElseThrow(() -> {
-            logActivityService.logActivity(null, ActivityType.FAILED_LOGIN_ATTEMPT, "Invalid username");
-            return new BadRequestException(Translator.toLocale(ERROR_MSG_LOGIN_FAILED));
-          });
+          .orElseThrow(() -> new BadRequestException(Translator.toLocale(ERROR_MSG_LOGIN_FAILED)));
     }
     if (user.getStatus() != UserStatus.ACTIVE) {
       logActivityService.logActivity(user, ActivityType.FAILED_LOGIN_ATTEMPT, "User is inactive");
