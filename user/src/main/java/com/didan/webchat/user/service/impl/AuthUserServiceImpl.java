@@ -11,7 +11,6 @@ import com.didan.webchat.user.constant.RoleConstant;
 import com.didan.webchat.user.constant.ThemeMode;
 import com.didan.webchat.user.constant.TokenType;
 import com.didan.webchat.user.constant.UserStatus;
-import com.didan.webchat.user.dto.EventDTO;
 import com.didan.webchat.user.dto.mapping.UserDTO;
 import com.didan.webchat.user.dto.request.LoginRequestDTO;
 import com.didan.webchat.user.dto.request.RegisterRequestDTO;
@@ -19,7 +18,6 @@ import com.didan.webchat.user.dto.response.LoginResponseDTO;
 import com.didan.webchat.user.entity.User;
 import com.didan.webchat.user.entity.UserPreference;
 import com.didan.webchat.user.entity.UserRole;
-import com.didan.webchat.user.entity.UserToken;
 import com.didan.webchat.user.exception.BadRequestException;
 import com.didan.webchat.user.exception.ResourceAlreadyExistException;
 import com.didan.webchat.user.exception.ResourceNotFoundException;
@@ -30,6 +28,8 @@ import com.didan.webchat.user.repository.UserRepository;
 import com.didan.webchat.user.repository.UserRoleRepository;
 import com.didan.webchat.user.service.AuthUserService;
 import com.didan.webchat.user.service.LogActivityService;
+import com.didan.webchat.user.service.RoleService;
+import com.didan.webchat.user.service.UserPreferenceService;
 import com.didan.webchat.user.service.UserTokenService;
 import com.didan.webchat.user.util.ImageGenerateUtils;
 import com.didan.webchat.user.util.ValidateUtils;
@@ -42,7 +42,6 @@ import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -61,10 +60,11 @@ public class AuthUserServiceImpl implements AuthUserService {
   private final UserPreferenceRepository userPreferenceRepository;
   private final UserMapper userMapper;
   private final AuthService authService;
-  private final ApplicationEventPublisher eventPublisher;
   private final LogActivityService logActivityService;
   private final UserTokenService userTokenService;
   private final AppConfigProperties appConfigProperties;
+  private final RoleService roleService;
+  private final UserPreferenceService userPreferenceService;
 
   private static final String BUCKET_AVATAR = "avatar";
   private static final String ERROR_MSG_LOGIN_FAILED = "msg.login.failed";
@@ -106,25 +106,11 @@ public class AuthUserServiceImpl implements AuthUserService {
     log.info("User registered successfully for user: {}", registerRequestDTO.getUsername());
 
     // Set default role for user
-    UserRole userRole = UserRole.builder()
-        .user(user)
-        .role(roleRepository.findByName(RoleConstant.ROLE_USER.name())
-            .orElseThrow(() -> new ResourceNotFoundException(
-                Translator.toLocale("msg.role.not.found", RoleConstant.ROLE_USER))))
-        .build();
-    userRoleRepository.save(userRole);
+    roleService.assignRoleToUser(user, RoleConstant.ROLE_USER);
     log.info("Default role assigned to user: {}", registerRequestDTO.getUsername());
 
     // Set default preferences for the user
-    UserPreference userPreference = UserPreference.builder()
-        .user(user)
-        .language("vi")
-        .soundEnabled(true)
-        .themeMode(ThemeMode.SYSTEM)
-        .notificationEnabled(true)
-        .timezone("UTC")
-        .build();
-    userPreferenceRepository.save(userPreference);
+    userPreferenceService.setUserPreference(user, null);
 
     // Publish user registration event
     logActivityService.logActivity(user, ActivityType.ACCOUNT_CREATION, "User registered successfully");

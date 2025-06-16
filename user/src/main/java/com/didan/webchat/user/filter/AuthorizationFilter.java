@@ -50,7 +50,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         UtilsCommon.sendError(new ContentCachingResponseWrapper(response), ResponseStatusCodeEnumV2.TOKEN_ERROR);
         return;
       }
-      ThreadContext.put(TrackingContextEnum.USER.getThreadKey(), authService.getClaims(jwtToken).get("usr").toString());
+      ThreadContext.put(TrackingContextEnum.USER.getThreadKey(), authService.getClaims(jwtToken).get(TrackingContextEnum.USER.getHeaderKey()).toString());
     } else {
       UtilsCommon.sendError(new ContentCachingResponseWrapper(response), ResponseStatusCodeEnumV2.TOKEN_ERROR);
       return;

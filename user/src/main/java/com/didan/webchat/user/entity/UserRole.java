@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * Entity representing the association between users and roles
@@ -31,6 +33,7 @@ public class UserRole {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    @CreationTimestamp
     @Column(name = "granted_at", nullable = false)
     private LocalDateTime grantedAt = LocalDateTime.now();
 }

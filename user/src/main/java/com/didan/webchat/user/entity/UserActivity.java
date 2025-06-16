@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
 
 /**
  * Entity representing user activity logs
@@ -41,6 +42,7 @@ public class UserActivity {
     @Column(name = "activity_details", length = 255)
     private String activityDetails;
 
+    @CreationTimestamp
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp = LocalDateTime.now();
 
